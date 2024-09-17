@@ -7,8 +7,8 @@ const myApp = http.createServer();
 const DB_FILE = process.argv.length > 2 ? process.argv[2] : '';
 
 /**
- * Count students in a CSV data file.
- * @param {String} dataPath The path to data file.
+ * Counts the students in a CSV data file.
+ * @param {String} dataPath The path to the CSV data file.
  */
 const countStudents = (dataPath) => new Promise((resolve, reject) => {
   if (!dataPath) {
@@ -23,38 +23,38 @@ const countStudents = (dataPath) => new Promise((resolve, reject) => {
         const reportParts = [];
         const fileLines = data.toString('utf-8').trim().split('\n');
         const studentGroups = {};
-        const filedNames = fileLines[0].split(',');
-        const propNames = filedNames.slice(
+        const dbFieldNames = fileLines[0].split(',');
+        const studentPropNames = dbFieldNames.slice(
           0,
-          filedNames.length - 1
+          dbFieldNames.length - 1,
         );
 
         for (const line of fileLines.slice(1)) {
           const studentRecord = line.split(',');
-          const propValues = studentRecord.slice(
+          const studentPropValues = studentRecord.slice(
             0,
-            studentRecord.length - 1
+            studentRecord.length - 1,
           );
           const field = studentRecord[studentRecord.length - 1];
           if (!Object.keys(studentGroups).includes(field)) {
             studentGroups[field] = [];
           }
-          const studentEntries = propNames.map((propName, idx) => [
+          const studentEntries = studentPropNames.map((propName, idx) => [
             propName,
-            propValues[idx]
+            studentPropValues[idx],
           ]);
           studentGroups[field].push(Object.fromEntries(studentEntries));
         }
 
         const totalStudents = Object.values(studentGroups).reduce(
-          (pre, cur) => (pre || []).length + cur.length
+          (pre, cur) => (pre || []).length + cur.length,
         );
         reportParts.push(`Number of students: ${totalStudents}`);
         for (const [field, group] of Object.entries(studentGroups)) {
           reportParts.push([
             `Number of students in ${field}: ${group.length}.`,
             'List:',
-            group.map((student) => student.firstname).join(', ')
+            group.map((student) => student.firstname).join(', '),
           ].join(' '));
         }
         resolve(reportParts.join('\n'));
@@ -63,21 +63,21 @@ const countStudents = (dataPath) => new Promise((resolve, reject) => {
   }
 });
 
-const Routes = [
+const SERVER_ROUTE_HANDLERS = [
   {
     route: '/',
-    handler (_, res) {
+    handler(_, res) {
       const responseText = 'Hello Holberton School!';
 
       res.setHeader('Content-Type', 'text/plain');
       res.setHeader('Content-Length', responseText.length);
       res.statusCode = 200;
       res.write(Buffer.from(responseText));
-    }
+    },
   },
   {
     route: '/students',
-    handler (_, res) {
+    handler(_, res) {
       const responseParts = ['This is the list of our students'];
 
       countStudents(DB_FILE)
@@ -97,12 +97,12 @@ const Routes = [
           res.statusCode = 200;
           res.write(Buffer.from(responseText));
         });
-    }
-  }
+    },
+  },
 ];
 
 myApp.on('request', (req, res) => {
-  for (const routeHandler of Routes) {
+  for (const routeHandler of SERVER_ROUTE_HANDLERS) {
     if (routeHandler.route === req.url) {
       routeHandler.handler(req, res);
       break;
