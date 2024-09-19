@@ -1,0 +1,25 @@
+{
+  "name": "0x06-unittests_in_js",
+  "version": "1.0.0",
+  "description": "A project to learn unittests in node js",
+  "scripts": {
+    "test": "node ./node_modules/mocha/bin/mocha --require babel-register --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kisotu/alx-backend-javascript.git#main"
+  },
+  "author": "Kisotu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kisotu/alx-backend-javascript/issues"
+  },
+  "homepage": "https://github.com/Kisotu/alx-backend-javascript/tree/main#readme",
+  "dependencies": {
+    "chai-http": "^5.0.0",
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.7.3"
+  }
+}
