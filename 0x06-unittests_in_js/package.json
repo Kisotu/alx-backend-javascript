@@ -18,6 +18,7 @@
   "dependencies": {
     "chai-http": "^5.0.0",
     "express": "^4.21.0",
+    "request": "^2.88.2",
     "sinon": "^19.0.2"
   },
   "devDependencies": {
